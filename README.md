@@ -63,5 +63,37 @@ But to get started:
 
 But in total: 5 directories, 19 files
 ```
-//react front end, express node backend
-2.. Lets make some simple react components,
+
+2. Lets install some dependancies 
+```
+npm install express cors passport passport-facebook passport-google passport-twitch passport-instagram passport-amazon passport-spotify passport-github chalk
+```
+
+3. This is us setting up a strategy 
+```
+//Facebook Strategy
+passport.use(new FacebookStrategy({
+    clientId: keys.FACEBOOK.clientID,
+    clientSecret: keys.FACEBOOK.clientSecret,
+    callbackUrl:  '/auth/facebook/callback'
+},
+    (accessToken, refreshToken, profile, cb) => {
+        console.log(chalk.blue(JSON.stringify(profile)));
+        user = { ...profile };
+        return cb(null, profile);
+    }));
+```
+```
+//Facebook Route
+app.get('auth/facebook', passport.authenticate('facebook'));
+app.get('auth/facebook/callback', 
+    passport.authenticate(('facebook'),
+        (req, res) => {
+           res.redirect("/profile");         
+        }));
+```
+
+4. Now we need some more dependancies for the front end:
+```
+npm install @material-ui/core @material-ui/icons lodash react-router react-router-dom
+```
